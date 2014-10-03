@@ -1,0 +1,16 @@
+dependencies {
+    compile project(':mapper-base')
+
+    compile "org.mongodb:mongo-java-driver:$MONGO_VERSION"
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            def snapshot = project.version?.contains('SNAPSHOT')
+            repository(url: "http://nexus.pic.bo/nexus/content/repositories/${snapshot ? 'snapshots' : 'releases'}") {
+                authentication(userName: System.getProperty('deployUser'), password: System.getProperty('deployPassword'))
+            }
+        }
+    }
+}

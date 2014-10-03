@@ -1,0 +1,35 @@
+ext.MONGO_VERSION = '2.12.2'
+ext.GUAVA_VERSION = '17.0'
+ext.SLF4J_VERSION = '1.7.5'
+ext.JAVATUPLES_VERSION = '1.1'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+
+    repositories {
+        mavenCentral()
+    }
+
+    project.group = 'bo.pic'
+    project.version = '1.0'
+
+    dependencies {
+        compile 'net.sourceforge.findbugs:jsr305:1.3.7' // @NotNull & @Nullable.
+    }
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: System.getProperty('deployUrl')) {
+                    authentication(userName: System.getProperty('deployUser'), password: System.getProperty('deployPassword'))
+                }
+            }
+        }
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '1.8'
+}
+

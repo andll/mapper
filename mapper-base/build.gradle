@@ -1,0 +1,21 @@
+
+configurations.all {
+    exclude module: 'commons-logging'
+}
+
+dependencies {
+    compile 'com.google.code.gson:gson:2.2.4'
+
+    compile "org.slf4j:slf4j-api:$SLF4J_VERSION" // Logger.
+
+    compile "com.google.guava:guava:$GUAVA_VERSION"
+
+    compile "org.javatuples:javatuples:$JAVATUPLES_VERSION"
+    compile 'cglib:cglib:3.0'
+    compile 'org.ow2.asm:asm-util:4.0' /* For some reason cglib does not have dependency to asm */
+    compile 'org.apache.commons:commons-io:1.3.2'
+
+    testCompile 'org.mockito:mockito-all:1.9.5'
+    testCompile 'junit:junit:4.11'
+}
+
