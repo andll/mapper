@@ -3,7 +3,7 @@ package bo.pic.server.mapper;
 import javax.annotation.Nonnull;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
-import java.util.UUID;
+import java.util.*;
 
 public class MappingContext {
     private final UUID id = UUID.randomUUID();
@@ -43,5 +43,19 @@ public class MappingContext {
     @SuppressWarnings("unchecked")
     public <T extends Annotation> T getAnnotation(Class clazz, Class<T> annotation) {
         return (T) clazz.getAnnotation(annotation);
+    }
+
+    @Nonnull
+    public Collection<String> getClassNames(@Nonnull Class clazz) {
+        RenamedFrom renamedFrom = getAnnotation(clazz, RenamedFrom.class);
+        if (renamedFrom == null) {
+            return Collections.singleton(clazz.getName());
+        }
+        List<String> list = new ArrayList<>(renamedFrom.value().length + 1);
+        list.add(clazz.getName());
+        for (String name : renamedFrom.value()) {
+            list.add(name);
+        }
+        return Collections.unmodifiableCollection(list);
     }
 }

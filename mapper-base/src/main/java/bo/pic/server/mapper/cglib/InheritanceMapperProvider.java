@@ -29,7 +29,9 @@ public class InheritanceMapperProvider implements ObjectMapperProvider {
     private Mapper createInheritanceMapper(Class clazz, @Nonnull MappingContext context, Class... implementations) {
         Map<String, Mapper<Object>> mapping = new HashMap<>(implementations.length);
         for (Class impl : implementations) {
-            mapping.put(impl.getName(), context.mapperFor(impl));
+            for (String name : context.getClassNames(impl)) {
+                mapping.put(name, context.mapperFor(impl));
+            }
         }
         return new InheritanceMapper(clazz.toString(), mapping);
     }
