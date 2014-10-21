@@ -1,16 +1,26 @@
 package bo.pic.server.mapper.writers;
 
-import com.google.gson.stream.JsonWriter;
 import bo.pic.server.mapper.TreeWriter;
 import bo.pic.server.mapper.tokens.*;
+import com.google.gson.stream.JsonWriter;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
 import java.io.StringWriter;
 
 public class JsonTreeWriter implements TreeWriter {
-    private final StringWriter stringWriter = new StringWriter();
-    private final JsonWriter jsonWriter = new JsonWriter(stringWriter);
+    private final StringWriter stringWriter;
+    private final JsonWriter jsonWriter;
+
+    public JsonTreeWriter() {
+        stringWriter = new StringWriter();
+        jsonWriter = new JsonWriter(stringWriter);
+    }
+
+    public JsonTreeWriter(JsonWriter jsonWriter) {
+        stringWriter = null;
+        this.jsonWriter = jsonWriter;
+    }
 
     @Nonnull
     @Override
@@ -20,6 +30,9 @@ public class JsonTreeWriter implements TreeWriter {
     }
 
     public String toJsonString() {
+        if (stringWriter == null) {
+            throw new IllegalStateException("JsonTreeWriter was created with manual json writer, toJsonString() can not be invoked");
+        }
         try {
             jsonWriter.flush();
         } catch (IOException e) {
