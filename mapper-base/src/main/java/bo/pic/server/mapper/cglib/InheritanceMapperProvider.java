@@ -6,6 +6,7 @@ import bo.pic.server.mapper.tokens.*;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Type;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -30,7 +31,11 @@ public class InheritanceMapperProvider implements ObjectMapperProvider {
         Map<String, Mapper<Object>> mapping = new HashMap<>(implementations.length);
         for (Class impl : implementations) {
             for (String name : context.getClassNames(impl)) {
-                mapping.put(name, context.mapperFor(impl));
+                if (mapping.put(name, context.mapperFor(impl)) != null) {
+                    throw new IllegalArgumentException(
+                            String.format("Can not create inheritance mapInper for %s, name %s refers to multiple implementations",
+                                    Arrays.toString(implementations), name));
+                }
             }
         }
         return new InheritanceMapper(clazz.toString(), mapping);
