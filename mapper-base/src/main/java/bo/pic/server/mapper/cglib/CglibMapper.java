@@ -200,6 +200,9 @@ public class CglibMapper<T> implements Mapper<T> {
                 return Defaults.defaultValue(clazz);
             }
         }
+        if (fieldAccessor.field.getAnnotation(Nullable.class) != null) {
+            return null;
+        }
         if (type instanceof ParameterizedType) {
             Type rawType = ((ParameterizedType) type).getRawType();
             if (rawType == Set.class) {

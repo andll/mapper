@@ -12,10 +12,20 @@ subprojects {
     }
 
     project.group = 'bo.pic'
-    project.version = '1.2'
+    project.version = '1.3'
 
     dependencies {
         compile 'net.sourceforge.findbugs:jsr305:1.3.7' // @NotNull & @Nullable.
+    }
+
+    task sourcesJar(type: Jar) {
+        from sourceSets.main.allSource
+        classifier = 'sources'
+    }
+
+    artifacts {
+        archives jar
+        archives sourcesJar
     }
 
     uploadArchives {
@@ -30,6 +40,6 @@ subprojects {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.8'
+    gradleVersion = '2.2'
 }
 
