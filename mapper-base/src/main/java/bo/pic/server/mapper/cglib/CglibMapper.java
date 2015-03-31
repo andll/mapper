@@ -192,6 +192,9 @@ public class CglibMapper<T> implements Mapper<T> {
         }
     }
 
+    @Nullable
+    private final Java8OptionalMapperProvider java8OptionalMapperProvider = Java8OptionalMapperProvider.tryCreate();
+
     private Object defaultValue(FieldAccessor fieldAccessor) {
         Type type = fieldAccessor.field.getGenericType();
         if (type instanceof Class) {
@@ -216,6 +219,9 @@ public class CglibMapper<T> implements Mapper<T> {
             }
             if (rawType == SortedMap.class) {
                 return ImmutableSortedMap.of();
+            }
+            if (java8OptionalMapperProvider != null && java8OptionalMapperProvider.isOptionalClass((Class) rawType)) {
+                return java8OptionalMapperProvider.getDefaultValue();
             }
         }
         return null;

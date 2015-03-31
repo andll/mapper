@@ -4,20 +4,29 @@ import bo.pic.server.mapper.cglib.AnnotationMapperProvider;
 import bo.pic.server.mapper.cglib.CglibMapperProvider;
 import bo.pic.server.mapper.cglib.InheritanceMapperProvider;
 import bo.pic.server.mapper.collections.CollectionsMapperProvider;
+import com.google.common.collect.Lists;
 
 import javax.annotation.Nonnull;
 import java.lang.reflect.Type;
+import java.util.List;
 
 public class MapperFacade {
     private final MappingContext rootContext;
 
     public MapperFacade() {
-        ListMapperProvider listProvider = new ListMapperProvider(new BasicMapperProvider(),
-                                                                 new CollectionsMapperProvider(),
-                                                                 new AnnotationMapperProvider(),
-                                                                 new InheritanceMapperProvider(),
-                                                                 new EnumMapperProvider(),
-                                                                 new CglibMapperProvider());
+        List<ObjectMapperProvider> providers = Lists.newArrayList(new BasicMapperProvider(),
+                new CollectionsMapperProvider(),
+                new AnnotationMapperProvider(),
+                new InheritanceMapperProvider(),
+                new EnumMapperProvider());
+
+        Java8OptionalMapperProvider java8OptionalMapperProvider = Java8OptionalMapperProvider.tryCreate();
+        if (java8OptionalMapperProvider != null) {
+            providers.add(java8OptionalMapperProvider);
+        }
+
+        providers.add(new CglibMapperProvider());
+        ListMapperProvider listProvider = new ListMapperProvider(providers);
         CachingMapperProvider cachingProvider = new CachingMapperProvider(listProvider);
         rootContext = new MappingContext(cachingProvider);
     }

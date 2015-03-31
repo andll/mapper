@@ -17,6 +17,10 @@ public class JsonTreeReader implements TreeReader {
         jsonReader = new JsonReader(new StringReader(value));
     }
 
+    public JsonTreeReader(JsonReader jsonReader) {
+        this.jsonReader = jsonReader;
+    }
+
     @Nonnull
     @Override
     public Token nextToken() {

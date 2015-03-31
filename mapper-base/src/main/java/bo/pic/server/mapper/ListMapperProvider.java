@@ -13,6 +13,10 @@ public class ListMapperProvider implements ObjectMapperProvider {
         this.providers = Arrays.asList(providers);
     }
 
+    public ListMapperProvider(List<ObjectMapperProvider> providers) {
+        this.providers = providers;
+    }
+
     @Nullable
     @Override
     public Mapper mapperFor(@Nonnull Type clazz, @Nonnull MappingContext context) {
