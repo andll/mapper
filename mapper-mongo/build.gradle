@@ -1,5 +1,5 @@
 dependencies {
-    compile project(':mapper-base')
+    compile project(':mapper:mapper-base')
 
     compile "org.mongodb:mongo-java-driver:$MONGO_VERSION"
 }
